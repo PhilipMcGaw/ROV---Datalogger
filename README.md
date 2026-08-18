@@ -19,7 +19,7 @@ Implementation status: the service boundary and target NATS interface are docume
 Implementation is intentionally not included yet; this directory marks the service boundary and planned ownership.
 # ROV Datalogger
 
-The target Datalogger interface is NATS Core. It will store raw messages in SQLite and preserve the original subject, timestamp, bytes, text representation, and JSON representation where the payload is valid JSON. This keeps capture lossless while making later CSV analysis practical.
+The target Datalogger interface is NATS Core. The current storage layer preserves raw message bytes, text, and JSON representations in SQLite, but the checked-in runtime subscriber still uses MQTT/Paho and must be migrated before deployment.
 
 ## Quick start
 
@@ -38,7 +38,7 @@ python -m venv .venv
 ./run.sh
 ```
 
-The target configuration is `NATS_URL`, `NATS_SUBJECT`, and `DATALOGGER_DATABASE`. Until the implementation migration is complete, configuration examples are design guidance rather than a verified deployment recipe. The default database is `data/telemetry.sqlite3`; narrow the subject before production use if only selected telemetry is required.
+The target configuration is `NATS_URL`, `NATS_SUBJECT`, and `DATALOGGER_DATABASE`. The current implementation still uses MQTT-specific settings, so these are design targets rather than a verified deployment recipe. The default database is `data/telemetry.sqlite3`; narrow the subject before production use if only selected telemetry is required.
 
 ## Design boundary
 
