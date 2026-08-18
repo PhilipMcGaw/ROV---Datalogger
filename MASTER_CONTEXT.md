@@ -1,5 +1,7 @@
 # ROV Datalogger Master Context
 
+Interactive command examples assume Zsh. Shell scripts may use the interpreter declared by their shebang; documentation must keep interactive commands Zsh-compatible and identify any script-specific interpreter requirements.
+
 The Datalogger is part of the shared multi-robot framework. Each robot uses a distinct NATS namespace and has one active, Git-versioned JSON robot profile on its Raspberry Pi. The Datalogger records the subjects produced by that robot without changing commands or applying Controller-side actuator mappings. Profile and namespace changes require corresponding documentation and test updates.
 
 The Datalogger is co-installed with Cockpit and Control on the robot Raspberry Pi and communicates with both through NATS Core. It observes and records the agreed message subjects; it must not intercept, modify, delay, or become a dependency for control messages.

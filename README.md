@@ -6,7 +6,7 @@ This folder is reserved for the standalone telemetry logging service.
 
 The intended service subscribes to selected NATS Core subjects and persists timestamped readings to SQLite, with CSV export for analysis and backup workflows.
 
-Migration note: the current checked-in implementation still contains legacy MQTT/Paho code and configuration names. It must not be described as NATS-ready until that implementation is migrated and tested.
+Implementation status: the service boundary and target NATS interface are documented, but the checked-in implementation still requires migration and testing before it can be described as production-ready.
 
 ## Design constraints
 
@@ -38,7 +38,7 @@ python -m venv .venv
 ./run.sh
 ```
 
-The target configuration is `NATS_URL`, `NATS_SUBJECT`, and `DATALOGGER_DATABASE`. The checked-in example currently retains legacy MQTT variable names and must be migrated with the implementation. The default database is `data/telemetry.sqlite3`; narrow the subject before production use if only selected telemetry is required.
+The target configuration is `NATS_URL`, `NATS_SUBJECT`, and `DATALOGGER_DATABASE`. Until the implementation migration is complete, configuration examples are design guidance rather than a verified deployment recipe. The default database is `data/telemetry.sqlite3`; narrow the subject before production use if only selected telemetry is required.
 
 ## Design boundary
 
