@@ -1,0 +1,21 @@
+[Unit]
+Description=ROV Datalogger
+After=network-online.target nats-server.service
+Wants=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/ROV---Datalogger
+Environment=NATS_URL=nats://127.0.0.1:4222
+Environment=NATS_SUBJECT=>
+Environment=DATALOGGER_DATABASE=/home/pi/ROV---Datalogger/data/telemetry.sqlite3
+Environment=DATALOGGER_RETENTION_DAYS=30
+Environment=DATALOGGER_EXPORT_DIR=/home/pi/ROV---Cockpit/media/data/csv
+ExecStart=/home/pi/ROV---Datalogger/.venv/bin/python -m rov_datalogger.main
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

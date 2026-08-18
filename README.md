@@ -4,9 +4,9 @@ This folder is reserved for the standalone telemetry logging service.
 
 ## Planned responsibility
 
-The intended service subscribes to selected NATS Core subjects and persists timestamped readings to SQLite, with CSV export for analysis and backup workflows.
+The service subscribes to selected NATS Core subjects and persists a message to SQLite only when its payload differs from the last recorded value for that subject. Each change includes its UTC timestamp, subject, raw payload, text representation, and JSON representation where valid. Repeated identical values are ignored, including after restart. CSV export is available for analysis and backup workflows.
 
-Implementation status: the service boundary and target NATS interface are documented, but the checked-in implementation still requires migration and testing before it can be described as production-ready.
+Implementation status: the NATS subscriber and SQLite storage path are implemented; reconnect, retention, backup, deployment, and production validation remain outstanding.
 
 ## Design constraints
 
@@ -16,7 +16,7 @@ Implementation status: the service boundary and target NATS interface are docume
 - Use SQLite as the primary store and CSV as an export format.
 - Add retention, batching, recovery, and backup behaviour before production deployment.
 
-Implementation is intentionally not included yet; this directory marks the service boundary and planned ownership.
+The service is intentionally independent of Control and Cockpit; a database or export failure must not stop hardware control or the operator interface.
 # ROV Datalogger
 
 The target Datalogger interface is NATS Core. The current storage layer preserves raw message bytes, text, and JSON representations in SQLite, but the checked-in runtime subscriber still uses MQTT/Paho and must be migrated before deployment.
@@ -38,7 +38,7 @@ python -m venv .venv
 ./run.sh
 ```
 
-The target configuration is `NATS_URL`, `NATS_SUBJECT`, and `DATALOGGER_DATABASE`. The current implementation still uses MQTT-specific settings, so these are design targets rather than a verified deployment recipe. The default database is `data/telemetry.sqlite3`; narrow the subject before production use if only selected telemetry is required.
+Configuration uses `NATS_URL`, `NATS_SUBJECT`, `DATALOGGER_DATABASE`, `DATALOGGER_RETENTION_DAYS`, and `DATALOGGER_EXPORT_DIR`. Retention defaults to 30 days; expired rows are removed at startup and periodically during operation. A missing or lost SQLite database is disposable and is recreated automatically. A complete `telemetry.csv` export is written at startup and refreshed during operation. On the robot, set Datalogger's export directory and Cockpit's `CSV_ROOT` to the shared Cockpit media path so the file is available through both SMB and Cockpit.
 
 ## Design boundary
 

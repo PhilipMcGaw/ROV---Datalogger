@@ -2,7 +2,7 @@
 
 ## Implemented
 
-The storage layer captures raw messages to SQLite and provides CSV export primitives. The checked-in runtime subscriber is still MQTT/Paho and is not compatible with the current NATS Core service contract. It does not control the ROV or provide a web UI.
+The runtime subscriber receives NATS Core messages and records a message to SQLite only when its payload differs from the last recorded value for that subject. Changes include their UTC timestamp, subject, raw payload, text representation, and normalised JSON where valid. A 30-day retention policy removes expired rows at startup and periodically during operation. CSV export primitives are available. It does not control the ROV or provide a web UI.
 
 ## Automated-test verification
 
@@ -14,8 +14,8 @@ Physical ROV and production deployment validation are not recorded here and must
 
 ## Planned or unverified
 
-- Migrate the runtime subscriber and configuration from MQTT/Paho to NATS Core.
-- Rename MQTT-specific schema identifiers and configuration names, with an explicit existing-database migration decision.
+- Reconnect handling and graceful service recovery.
+- Retention, batching, SQLite compaction, and operational monitoring. A lost database is intentionally recreated rather than restored.
 
 CSV export, reporting, retention policy, and production backup procedures require explicit implementation and evidence.
 
