@@ -15,9 +15,8 @@ Physical ROV and production deployment validation are not recorded here and must
 ## Planned or unverified
 
 - Reconnect handling and graceful service recovery.
-- Retention, batching, SQLite compaction, and operational monitoring. A lost database is intentionally recreated rather than restored.
-
-CSV export, reporting, retention policy, and production backup procedures require explicit implementation and evidence.
+- Reconnect handling and graceful service recovery.
+- Batching, SQLite compaction, and operational monitoring. A lost database is intentionally recreated rather than restored.
 
 ## References
 
