@@ -1,6 +1,6 @@
 # ROV data logger
 
-This folder is reserved for the standalone telemetry logging service.
+This repository contains the standalone telemetry logging service.
 
 ## Planned responsibility
 
@@ -32,13 +32,18 @@ scripts\2_start_app.bat
 
 Linux/Raspberry Pi:
 
-```bash
+For an installed robot, follow Cockpit's `docs/deployment.md`: its canonical
+provisioner installs this service beside Cockpit and Control, renders the
+systemd unit for the actual checkout location, and supplies the local
+authenticated NATS URL. For local Linux development:
+
+```zsh
 python -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ./run.sh
 ```
 
-Configuration uses `NATS_URL`, `NATS_SUBJECT`, `DATALOGGER_DATABASE`, `DATALOGGER_RETENTION_DAYS`, and `DATALOGGER_EXPORT_DIR`. Retention defaults to 30 days; expired rows are removed at startup and periodically during operation. A missing or lost SQLite database is disposable and is recreated automatically. A complete `telemetry.csv` export is written at startup and refreshed during operation. On the robot, set Datalogger's export directory and Cockpit's `CSV_ROOT` to the shared Cockpit media path so the file is available through both SMB and Cockpit.
+Configuration uses `NATS_URL`, `NATS_SUBJECT`, `DATALOGGER_DATABASE`, `DATALOGGER_RETENTION_DAYS`, and `DATALOGGER_EXPORT_DIR`. The deployed unit obtains `NATS_URL` from the restricted `/etc/robot/nats.env` file and writes CSV to Cockpit's shared media directory. Retention defaults to 30 days; expired rows are removed at startup and periodically during operation. A missing or lost SQLite database is disposable and is recreated automatically. A complete `telemetry.csv` export is written at startup and refreshed during operation. The provisioning path is implemented but has not yet been Raspberry Pi bench-tested.
 
 ## Design boundary
 
