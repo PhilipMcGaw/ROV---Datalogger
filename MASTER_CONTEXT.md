@@ -2,17 +2,17 @@
 
 Interactive command examples assume Zsh. Shell scripts may use the interpreter declared by their shebang; documentation must keep interactive commands Zsh-compatible and identify any script-specific interpreter requirements.
 
-The Datalogger is part of the shared multi-robot framework. Each robot uses a distinct NATS namespace and has one active, Git-versioned JSON robot profile on its Raspberry Pi. The Datalogger records the subjects produced by that robot without changing commands or applying Controller-side actuator mappings. Profile and namespace changes require corresponding documentation and test updates.
+The Datalogger is part of the shared multi-robot framework. Each robot uses a distinct NATS namespace and has one active, Git-versioned JSON robot profile on its Raspberry Pi. The Datalogger records the subjects produced by that robot without changing commands or applying Control-side actuator mappings. Profile and namespace changes require corresponding documentation and test updates.
 
 The Datalogger is co-installed with Cockpit and Control on the robot Raspberry Pi and communicates with both through NATS Core. It observes and records the agreed message subjects; it must not intercept, modify, delay, or become a dependency for control messages.
 
-Datalogger loads and validates the shared profile during boot and records the active profile identity and revision with its runtime status.
+The intended deployment loads and validates the shared profile during boot. The current Datalogger implementation does not yet load the profile or publish profile identity in runtime status; those remain planned work.
 
 Robot profiles currently originate in the Cockpit repository under `configs/profiles/`. Datalogger consumes the deployed active profile for namespace and recording metadata and must not maintain an independently edited copy.
 
 The shared runtime profile is initially `/etc/robot/profile.json` on the robot Raspberry Pi and is loaded during boot.
 
-On Linux, the documented clone location is `~/ROV - Datalogger`, beside the other ROV repositories. On macOS, use a user-selected workspace beneath the home directory, for example `~/Projects/ROV/ROV - Datalogger`. This is a default convention, not a hard-coded path; scripts must derive paths from their own location.
+On Linux, the documented clone location is `~/robots/ROV---Datalogger`, beside the other ROV repositories. On macOS, use a user-selected workspace beneath the home directory, for example `~/Projects/ROV/ROV---Datalogger`. This is a default convention, not a hard-coded path; scripts must derive paths from their own location.
 
 The enforceable documentation policy is `docs/documentation-policy.md`, with contributor guidance in `CONTRIBUTING.md`, current status in `docs/status.md`, and checks in `tests/test_documentation.py` and `tests/documentation_change_policy.py` using `tests/documentation_change_policy.json`.
 
