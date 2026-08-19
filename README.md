@@ -6,20 +6,20 @@ This folder is reserved for the standalone telemetry logging service.
 
 The service subscribes to selected NATS Core subjects and persists a message to SQLite only when its payload differs from the last recorded value for that subject. Each change includes its UTC timestamp, subject, raw payload, text representation, and JSON representation where valid. Repeated identical values are ignored, including after restart. CSV export is available for analysis and backup workflows.
 
-Implementation status: the NATS subscriber and SQLite storage path are implemented; reconnect, retention, backup, deployment, and production validation remain outstanding.
+Implementation status: the NATS subscriber, SQLite storage path, change-only recording, 30-day retention, CSV export, and deployment integration are implemented. Reconnect recovery, compaction, operational monitoring, and production validation remain outstanding.
 
 ## Design constraints
 
 - Run independently from `Control/` and `Cockpit/`.
 - Never block or alter motor-control messages.
-- Store the original NATS subject, value, timestamp, and quality/status where available after migration.
+- Store the original NATS subject, value, timestamp, and quality/status where available.
 - Use SQLite as the primary store and CSV as an export format.
-- Add retention, batching, recovery, and backup behaviour before production deployment.
+- Add batching, recovery, compaction, and backup behaviour before production deployment.
 
 The service is intentionally independent of Control and Cockpit; a database or export failure must not stop hardware control or the operator interface.
 # ROV Datalogger
 
-The target Datalogger interface is NATS Core. The current storage layer preserves raw message bytes, text, and JSON representations in SQLite, but the checked-in runtime subscriber still uses MQTT/Paho and must be migrated before deployment.
+The target and current Datalogger interface is NATS Core. The runtime subscriber preserves raw message bytes, text, and JSON representations in SQLite.
 
 ## Quick start
 
